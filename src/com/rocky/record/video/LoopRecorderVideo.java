@@ -1,4 +1,4 @@
-package com.example.videotest;
+package com.rocky.record.video;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
@@ -26,7 +25,16 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 
-public class VideoTest extends Activity implements Callback {
+import com.example.videotest.R;
+
+/**
+ * @author Rocky
+ *
+ * @Time 2015年7月30日  下午3:44:12
+ *
+ * @description 循环录制视频，每隔10秒录制一个文件
+ */
+public class LoopRecorderVideo extends Activity implements Callback {
 
 	public static final String TAG = "VideoTest";
 	
@@ -42,7 +50,7 @@ public class VideoTest extends Activity implements Callback {
 		
 		initCamera();
 		
-		setContentView(R.layout.videotest);
+		setContentView(R.layout.activity_record_video);
 		
 		initSurfaceView();
 	}
@@ -98,10 +106,6 @@ public class VideoTest extends Activity implements Callback {
 			long duration = System.currentTimeMillis();
 			mMediaRecorder.reset();
 			duration = System.currentTimeMillis() - duration;
-			
-			
-			
-			System.out.println("duration----------->>>>>>" + duration);
 //			mMediaRecorder.release();
 			mMediaRecorder = null;
 			mMediaRecorder = new MediaRecorder();
@@ -223,8 +227,8 @@ public class VideoTest extends Activity implements Callback {
             if(null != b)    {  
                 //设置FOCUS_MODE_CONTINUOUS_VIDEO)之后，myParam.set("rotation", 90)失效。  
                 //图片竟然不能旋转了，故这里要旋转下  
-                Bitmap rotaBitmap = ImageUtil.getRotateBitmap(b, 90.0f);  
-                FileUtil.saveBitmap(rotaBitmap);  
+                Bitmap rotaBitmap = DoTakePictureImageUtil.getRotateBitmap(b, 90.0f);  
+                FileStoragePathUtil.saveBitmap(rotaBitmap);  
             }  
         }  
     };  
@@ -295,11 +299,6 @@ public class VideoTest extends Activity implements Callback {
 		return timeNow;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
 
 	@Override
 	protected void onPause() {
